@@ -1,0 +1,97 @@
+---
+title: "HW1_Group13"
+author: "Luning Ding; Johannes Graf; Wangchen He; Haoyan Zhang"
+date: "2025-09-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problem 1. ACT2.9: Beta coefficients for stocks
+## a) Scatter Plot
+```{r}
+stock_data <- read_csv("StockBeta.csv", skip = 1)
+head(stock_data)
+
+##eliminate the '%'
+stock_data$`S&P 500` <- as.numeric(gsub("[%]","", as.character(stock_data$`S&P 500`)))
+stock_data$IBM <- as.numeric(gsub("[%]", "", as.character(stock_data$IBM)))
+stock_data$Apple <- as.numeric(gsub("[%]", "",as.character(stock_data$Apple)))
+##scatter plot of IBM & S&P 500
+plot(stock_data$`S&P 500`, stock_data$`IBM`, 
+     xlab="S&P 500 Return Rate(%)", 
+     ylab="IBM Return Rate(%)", 
+     main="IBM VS S&P 500")
+
+##scatter plot of Apple & S&P 500
+plot(stock_data$`S&P 500`, stock_data$`Apple`, 
+     xlab="S&P 500 Return Rate(%)", 
+     ylab="Apple Return Rate(%)", 
+     main="Apple VS S&P 500")
+``` 
+Comments on these 2 plots:
+1)
+2)
+
+
+## b) Beta coefficients
+```{r}
+stock_data$Apple <- as.numeric(gsub("[%]", "",as.character(stock_data$Apple)))
+lm_IBM <- lm(IBM ~ `S&P 500`, data = stock_data)
+lm_Apple <- lm(Apple ~ `S&P 500`, data = stock_data)
+
+summary(lm_IBM)
+summary(lm_Apple)
+
+beta_IBM <- coef(lm_IBM)[2]
+beta_Apple <- coef(lm_Apple)[2]
+
+## beta for IBM with reference to S&P 500
+beta_IBM
+## beta for Apple with reference to S&P 500
+beta_Apple
+
+## so the beta of IBM
+```
+Comments on these 2 betas:
+
+
+
+## c)Standard Deviations and Correlation Matrix
+```{r}
+std_sp <- sd(stock_data$`S&P 500`)
+std_ibm <- sd(stock_data$IBM)
+std_app <- sd(stock_data$Apple)
+##Standard Devisation for S&P 500
+std_sp
+##Standard Deviation for IBM
+std_ibm
+##Standard Deviation for Apple
+std_app
+
+corr_matrix <- cor(stock_data[, c("S&P 500", "IBM", "Apple")])
+corr_matrix
+
+## β = rsy/sx
+checkIBM <- cor(stock_data$`S&P 500`, stock_data$IBM) * (std_ibm/std_sp)
+checkApp <- cor(stock_data$`S&P 500`, stock_data$Apple) * (std_app/std_sp)
+
+checkIBM == beta_IBM
+checkIBM - beta_IBM
+##floating-point precision issue (e-16).Actually they are the same
+checkApp == beta_Apple
+
+```
+Comments for c):
+
+##d)
+
+
+
+
+
+## Problem 2
+
+## Problem 3
